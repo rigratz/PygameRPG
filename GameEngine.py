@@ -24,7 +24,7 @@ class GameEngine(object):
         self.player = Player(32, 32)
         self.levels = Levels()
         self.state = EXPLORING
-        self.party = Party()
+        self.party = default_party()
         level = self.levels.get_level(0)
         total_level_width = len(level[0])*32
         total_level_height = len(level)*32
@@ -32,12 +32,12 @@ class GameEngine(object):
 
     def start(self):
         self.state = EXPLORING
-        self.party.newMember(Character("Riley"))
-        self.party.newMember(Character("Darren"))
-        self.party.newMember(Character("John"))
-        self.party.newMember(Character("!tits"))
+        #self.party.newMember(Character("Riley"))
+        #self.party.newMember(Character("Darren"))
+        #self.party.newMember(Character("John"))
+        #self.party.newMember(Character("!tits"))
         self.state = BATTLE
-        bat = Battle(self.party.getParty(), 3, 4)
+        bat = Battle(self.party.get_party(), 3, 4)
         while 1:
             self.timer.tick(60)
             self.control.handle_controls(self.state)

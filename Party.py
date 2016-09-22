@@ -1,67 +1,42 @@
 class Party(object):
+    """Representation of a party of Characters"""
+    
     def __init__(self):
         self.party = []
 
-    def newMember(self, member):
+    def add_member(self, member):
+        """Add character to party."""
         self.party.append(member)
 
-    def getMember(self, index):
+    def get_member(self, index):
+        """Get party member by position."""
         return self.party[index]
 
-    def getParty(self):
+    def get_party(self):
+        """Return reference to party property."""
         return self.party
 
-
 class Character(object):
-    def __init__(self, name):
-        if name == "Riley":
-            self.name = "Riley"
-            self.atb = 0
-            self.ready = False
-            self.hp = 999
-            self.mp = 99
-            self.str = 10
-            self.mag = 10
-            self.dfn = 10
-            self.mgd = 10
-            self.spd = 15
-            self.techs = ["Fire", "Ice", "Lightning"]
-        elif name == "Darren":
-            self.name = "Darren"
-            self.atb = 0
-            self.ready = False
-            self.hp = 999
-            self.mp = 99
-            self.str = 10
-            self.mag = 10
-            self.dfn = 10
-            self.mgd = 10
-            self.spd = 10
-            self.techs = ["Fire", "Ice", "Lightning"]
-        elif name == "John":
-            self.name = "John"
-            self.atb = 0
-            self.ready = False
-            self.hp = 999
-            self.mp = 99
-            self.str = 10
-            self.mag = 10
-            self.dfn = 10
-            self.mgd = 10
-            self.spd = 20
-            self.techs = ["Fire", "Ice", "Lightning"]
-        elif name == "!tits":
-            self.name = "!tits"
-            self.atb = 0
-            self.ready = False
-            self.hp = 999
-            self.mp = 99
-            self.str = 10
-            self.mag = 10
-            self.dfn = 10
-            self.mgd = 10
-            self.spd = 5
-            self.techs = ["Fire", "Ice", "Lightning"]
+    """Representation of a playable character"""
+    
+    def __init__(self, name, **kwargs):
+        self.name = name
+        self.atb = 0
+        self.ready = False
+        self.hp = 999
+        self.mp = 99
+        self.str = 10
+        self.mag = 10
+        self.dfn = 10
+        self.mgd = 10
+        self.spd = 10
+        self.techs = self.default_techs()
+        
+        for prop, value in kwargs.items():
+            if hasattr(self, prop):
+                setattr(self, prop, value)
+            else:
+                pass # throw some type of exception
 
     def get_name(self):
         return self.name
@@ -79,7 +54,16 @@ class Character(object):
         self.atb = 0
         self.ready = False
 
+    @staticmethod
+    def default_techs():
+        """Return list of default techs for a new Character."""
+        return ['Fire', 'Ice', 'Lightning']
 
-
-
-
+def default_party():
+    """Create default Party."""
+    party = Party()
+    party.add_member(Character('Riley', spd=15))
+    party.add_member(Character('Darren'))
+    party.add_member(Character('John', spd=20))
+    party.add_member(Character('!tits', spd=5))
+    return party
