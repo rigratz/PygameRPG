@@ -4,6 +4,10 @@ class Party(object):
     def __init__(self):
         self.party = []
 
+    def __iter__(self):
+        self._i = 0
+        return self
+
     def add_member(self, member):
         """Add character to party."""
         self.party.append(member)
@@ -15,6 +19,13 @@ class Party(object):
     def get_party(self):
         """Return reference to party property."""
         return self.party
+
+    def next(self):
+        if self._i < len(self.party):
+            self._i += 1
+            return self.party[self._i - 1]
+        else:
+            raise StopIteration()
 
 class Character(object):
     """Representation of a playable character"""
