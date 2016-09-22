@@ -2,7 +2,7 @@ class Party(object):
     """Representation of a party of Characters"""
     
     def __init__(self):
-        self.party = []
+        self.members = []
 
     def __iter__(self):
         self._i = 0
@@ -10,20 +10,20 @@ class Party(object):
 
     def add_member(self, member):
         """Add character to party."""
-        self.party.append(member)
+        self.members.append(member)
 
     def get_member(self, index):
         """Get party member by position."""
-        return self.party[index]
+        return self.members[index]
 
     def get_party(self):
         """Return reference to party property."""
-        return self.party
+        return self.members
 
     def next(self):
-        if self._i < len(self.party):
+        if self._i < len(self.members):
             self._i += 1
-            return self.party[self._i - 1]
+            return self.members[self._i - 1]
         else:
             raise StopIteration()
 
