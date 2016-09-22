@@ -9,6 +9,7 @@ BATTLE = 1
 MENU = 2
 LOOP_STATE = ["Exploring", "Battle", "Menu"]
 
+
 class Entity(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -30,7 +31,7 @@ class Enemy(Entity):
     def update(self, player):
         dist = distance(self, player)
 
-        #Watch out for zeroes
+        # Watch out for zeroes
         if dist == 0:
             dist = 0.00000001
         dx = (player.x - self.x) / dist
@@ -136,6 +137,7 @@ class Platform(Entity):
 
     def update(self):
         pass
+
 
 class Walkable(Entity):
     def __init__(self, x, y, type):

@@ -1,12 +1,12 @@
 class Levels(object):
     def __init__(self):
         self.maps = {}
-        self.createMaps(self.maps)
+        self.create_maps(self.maps)
 
-    def getLevel(self, index):
+    def get_level(self, index):
         return self.maps[index]
 
-    def createMaps(self, maps):
+    def create_maps(self, maps):
         maps[0] = [
             "PPPPPPPPPPPPPPPPPPPPPPPPP",
             "P             P         P",

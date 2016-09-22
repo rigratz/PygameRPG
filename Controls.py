@@ -9,9 +9,9 @@ DEFAULT = 3
 
 class Controls(object):
     def __init__(self):
-        self.up = self.down = self.left = self.right = self.running = False
+        self.up = self.down = self.left = self.right = self.running = self.select = self.skip = False
 
-    def handleControls(self, theState):
+    def handle_controls(self, theState):
         if theState == EXPLORING:
             for e in pygame.event.get():
                 if e.type == QUIT: raise SystemExit
@@ -25,8 +25,6 @@ class Controls(object):
                     self.left = True
                 if e.type == KEYDOWN and e.key == K_RIGHT:
                     self.right = True
-                if e.type == KEYDOWN and e.key == K_SPACE:
-                    self.running = True
 
                 if e.type == KEYUP and e.key == K_UP:
                     self.up = False
@@ -38,8 +36,20 @@ class Controls(object):
                     self.left = False
         elif theState == BATTLE:
             for e in pygame.event.get():
+                if e.type == QUIT: raise SystemExit
+                if e.type == KEYDOWN and e.key == K_ESCAPE:
+                    raise SystemExit
                 if e.type == KEYDOWN and e.key == K_SPACE:
-                    global state
-                    state = EXPLORING
+                    self.select = True
+                if e.type == KEYDOWN and e.key == K_s:
+                    self.skip = True
+
+                if e.type == KEYUP and e.key == K_s:
+                    self.skip = False
+                if e.type == KEYUP and e.key == K_SPACE:
+                    self.select = False
         elif theState == MENU:
             pass
+
+    def initialize(self):
+        self.up = self.down = self.left = self.right = self.select = self.skip = False

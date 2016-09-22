@@ -11,7 +11,7 @@ def main():
     pygame.display.set_caption("Pygame RPG Prototype")
 
     # Set-up level. Will change when other Tile-map method is employed.
-    level = game.levels.getLevel(0)
+    level = game.levels.get_level(0)
     x = y = 0
     for row in level:
         for col in row:
