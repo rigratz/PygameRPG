@@ -70,11 +70,12 @@ class Character(object):
         """Return list of default techs for a new Character."""
         return ['Fire', 'Ice', 'Lightning']
 
+
 def default_party():
     """Create default Party."""
     party = Party()
     party.add_member(Character('Riley', spd=15))
     party.add_member(Character('Darren'))
     party.add_member(Character('John', spd=20))
-    party.add_member(Character('!tits', spd=5))
+    party.add_member(Character('Rick', spd=5))
     return party

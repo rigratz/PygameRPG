@@ -1,6 +1,7 @@
 from Battle import *
 from Camera import *
 from Controls import *
+from EnemyGroup import *
 from Entity import *
 from Levels import *
 from Party import *
@@ -32,12 +33,8 @@ class GameEngine(object):
 
     def start(self):
         self.state = EXPLORING
-        #self.party.newMember(Character("Riley"))
-        #self.party.newMember(Character("Darren"))
-        #self.party.newMember(Character("John"))
-        #self.party.newMember(Character("!tits"))
         self.state = BATTLE
-        bat = Battle(self.party.get_party(), 3, 4)
+        bat = Battle(self.party.get_party(), EnemyGroup("SnowWorld"), 4)
         while 1:
             self.timer.tick(60)
             self.control.handle_controls(self.state)

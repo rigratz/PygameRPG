@@ -39,11 +39,19 @@ class Controls(object):
                 if e.type == QUIT: raise SystemExit
                 if e.type == KEYDOWN and e.key == K_ESCAPE:
                     raise SystemExit
+                if e.type == KEYDOWN and e.key == K_UP:
+                    self.up = True
+                if e.type == KEYDOWN and e.key == K_DOWN:
+                    self.down = True
                 if e.type == KEYDOWN and e.key == K_SPACE:
                     self.select = True
                 if e.type == KEYDOWN and e.key == K_s:
                     self.skip = True
 
+                if e.type == KEYUP and e.key == K_UP:
+                    self.up = False
+                if e.type == KEYUP and e.key == K_DOWN:
+                    self.down = False
                 if e.type == KEYUP and e.key == K_s:
                     self.skip = False
                 if e.type == KEYUP and e.key == K_SPACE:

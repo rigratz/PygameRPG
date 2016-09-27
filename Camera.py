@@ -1,7 +1,7 @@
 from pygame import *
 
-WIN_WIDTH = 800
-WIN_HEIGHT = 640
+WIN_WIDTH = 768
+WIN_HEIGHT = 672
 HALF_WIDTH = int(WIN_WIDTH / 2)
 HALF_HEIGHT = int(WIN_HEIGHT / 2)
 
