@@ -67,8 +67,6 @@ class Player(Entity):
             self.yvel = -2
         if control.down:
             self.yvel = 2
-        if control.running:
-            self.xvel = 12
         if control.left:
             self.xvel = -2
         if control.right:

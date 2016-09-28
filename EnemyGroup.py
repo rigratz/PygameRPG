@@ -15,12 +15,13 @@ class EnemyGroup(object):
                 self.members.append(Pengy())
             else:
                 self.members.append(IceDragon())
+                self.members.append(Pengy())
 
 
 class Enemy(object):
     def __init__(self, name, **kwargs):
         self.name = name
-        self.hp = 100
+        self.hp = 10
         self.atk = 10
         self.dfn = 10
         self.spd = 10
@@ -60,7 +61,7 @@ class Pengy(Enemy):
 
 class IceDragon(Enemy):
     def __init__(self):
-        super(IceDragon, self).__init__('Ice Dragon', atk=50, spd=3)
+        super(IceDragon, self).__init__('Ice Dragon', hp=30, atk=50, spd=3)
 
     def battle_script(self):
         print('Ice Dragon strikes!')

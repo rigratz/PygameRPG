@@ -9,7 +9,7 @@ DEFAULT = 3
 
 class Controls(object):
     def __init__(self):
-        self.up = self.down = self.left = self.right = self.running = self.select = self.skip = False
+        self.up = self.down = self.left = self.right = self.select = self.skip = self.cancel = False
 
     def handle_controls(self, theState):
         if theState == EXPLORING:
@@ -47,6 +47,8 @@ class Controls(object):
                     self.select = True
                 if e.type == KEYDOWN and e.key == K_s:
                     self.skip = True
+                if e.type == KEYDOWN and e.key == K_x:
+                    self.cancel = True
 
                 if e.type == KEYUP and e.key == K_UP:
                     self.up = False
@@ -56,8 +58,10 @@ class Controls(object):
                     self.skip = False
                 if e.type == KEYUP and e.key == K_SPACE:
                     self.select = False
+                if e.type == KEYUP and e.key == K_x:
+                    self.cancel = False
         elif theState == MENU:
             pass
 
     def initialize(self):
-        self.up = self.down = self.left = self.right = self.select = self.skip = False
+        self.up = self.down = self.left = self.right = self.select = self.skip = self.cancel = False

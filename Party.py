@@ -3,6 +3,7 @@ class Party(object):
     
     def __init__(self):
         self.members = []
+        self.items = ["Potion", "Phoenix Down"]
 
     def __iter__(self):
         self._i = 0

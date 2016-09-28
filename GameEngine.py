@@ -34,7 +34,7 @@ class GameEngine(object):
     def start(self):
         self.state = EXPLORING
         self.state = BATTLE
-        bat = Battle(self.party.get_party(), EnemyGroup("SnowWorld"), 4)
+        bat = Battle(self.party, EnemyGroup("SnowWorld"), 4)
         while 1:
             self.timer.tick(60)
             self.control.handle_controls(self.state)
@@ -49,6 +49,8 @@ class GameEngine(object):
         bg = Surface((32,32))
         bg.convert()
         bg.fill(Color("#000000"))
+        self.screen.fill((0, 0, 0))
+
         # draw background
         for y in range(32):
             for x in range(32):
@@ -71,7 +73,7 @@ class GameEngine(object):
         bg.convert()
         bg.fill(Color("#000000"))
         self.screen.fill((0, 0, 0))
-        battle.progress(self.control, self.screen)
+        self.state = battle.progress(self.control, self.screen)
 
         pygame.display.update()
 
