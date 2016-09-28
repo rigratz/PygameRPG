@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="13997186-785c-4b22-b21e-18cc97c2c28a" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Battle.py" afterPath="$PROJECT_DIR$/Battle.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controls.py" afterPath="$PROJECT_DIR$/Controls.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/EnemyGroup.py" afterPath="$PROJECT_DIR$/EnemyGroup.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Entity.py" afterPath="$PROJECT_DIR$/Entity.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GameEngine.py" afterPath="$PROJECT_DIR$/GameEngine.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Party.py" afterPath="$PROJECT_DIR$/Party.py" />
-    </list>
+    <list default="true" id="13997186-785c-4b22-b21e-18cc97c2c28a" name="Default" comment="" />
     <ignored path="PygameRPG.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
