@@ -1,3 +1,6 @@
+from BattleEntity import BattleEntity
+
+
 class Party(object):
     """Representation of a party of Characters"""
     
@@ -28,55 +31,48 @@ class Party(object):
         else:
             raise StopIteration()
 
-class Character(object):
-    """Representation of a playable character"""
-    
-    def __init__(self, name, **kwargs):
-        self.name = name
-        self.atb = 0
-        self.ready = False
-        self.hp = 999
-        self.mp = 99
-        self.str = 10
-        self.mag = 10
-        self.dfn = 10
-        self.mgd = 10
-        self.spd = 10
-        self.techs = self.default_techs()
-        
-        for prop, value in kwargs.items():
-            if hasattr(self, prop):
-                setattr(self, prop, value)
-            else:
-                pass # throw some type of exception
 
-    def get_name(self):
-        return self.name
+class Knight(BattleEntity):
+    """Class representing one of the game's main characters. Specifically, this is for the character who follows
+        the typical Knight trope"""
+    def __init__(self):
+        knightTechs = ['Cover', 'Power Break', 'Magic Break']
+        super(Knight, self).__init__(name='Darren', job='Knight', hp=100, mp=20, str=15, mag=5, dfn=15, mgd=8,
+                                     spd=8, techs=knightTechs, friendly=True)
 
-    def atb_charge(self, increment):
-        if self.atb >= 100:
-            self.atb = 100
-        else:
-            self.atb += self.spd * (increment / 1000)
 
-    def get_atb_charge(self):
-        return self.atb
+class Rogue(BattleEntity):
+    """Class representing one of the game's main characters. Specifically, this is for the character who follows
+        the typical Rogue trope"""
+    def __init__(self):
+        rogueTechs = ['Steal', 'Flee', 'Hide']
+        super(Rogue, self).__init__(name='Riley', job='Rogue', hp=75, mp=25, str=9, mag=8, dfn=10, mgd=8,
+                                    spd=12, techs=rogueTechs, friendly=True)
 
-    def reset_atb(self):
-        self.atb = 0
-        self.ready = False
 
-    @staticmethod
-    def default_techs():
-        """Return list of default techs for a new Character."""
-        return ['Fire', 'Ice', 'Lightning']
+class Mage(BattleEntity):
+    """Class representing one of the game's main characters. Specifically, this is for the character who follows
+        the typical Mage trope"""
+    def __init__(self):
+        mageTechs = ['Fire', 'Ice', 'Lightning']
+        super(Mage, self).__init__(name='John', job='Mage', hp=50, mp=40, str=4, mag=14, dfn=6, mgd=12,
+                                   spd=9, techs=mageTechs, friendly=True)
+
+
+class Cleric(BattleEntity):
+    """Class representing one of the game's main characters. Specifically, this is for the character who follows
+        the typical Cleric trope"""
+    def __init__(self):
+        clericTechs = ['Heal', 'Revive', 'Barrier']
+        super(Cleric, self).__init__(name='Rick', job='Cleric', hp=50, mp=40, str=4, mag=13, dfn=6, mgd=13,
+                                     spd=9, techs=clericTechs, friendly=True)
 
 
 def default_party():
     """Create default Party."""
     party = Party()
-    party.add_member(Character('Riley', spd=15))
-    party.add_member(Character('Darren'))
-    party.add_member(Character('John', spd=20))
-    party.add_member(Character('Rick', spd=5))
+    party.add_member(Knight())
+    party.add_member(Rogue())
+    party.add_member(Mage())
+    party.add_member(Cleric())
     return party

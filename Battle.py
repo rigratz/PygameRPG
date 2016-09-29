@@ -4,10 +4,10 @@ import random
 
 # Constants for identifying default battle actions
 ATTACK = 0
-MAGIC = 1
+SPECIAL = 1
 ITEM = 2
 DEFEND = 3
-ACTIONS = ['Attack', 'Magic', 'Item', 'Defend']
+ACTIONS = ['Attack', 'Special', 'Item', 'Defend']
 
 # Constants for returning state of Battle
 BATTLE_OVER = 0
@@ -35,15 +35,6 @@ class Battle(object):
         for p in self.players:
             p.atb = random.randrange(0, 100)
 
-    # def get_players(self):
-    #     return self.players
-    #
-    # def get_enemies(self):
-    #     return self.enemies
-    #
-    # def get_battle_queue(self):
-    #     return self.battleQueue
-
     def progress(self, controls, screen):
         """Main logic controlling the flow of the Battle loop"""
 
@@ -67,7 +58,7 @@ class Battle(object):
         for p in self.players:
             # Adjust player character's ATB gauge
             p.atb_charge(atbIncrement)
-            if p.ready is False and p.get_atb_charge() == 100:
+            if p.ready is False and p.atb == 100:
                 # Place player character in Battle Queue if ready for action
                 self.battleQueue.enqueue(p)
                 if self.highlightedAction == -1:
@@ -75,7 +66,7 @@ class Battle(object):
                 p.ready = True
 
             # Display Character info on screen
-            self.display_single_line((p.get_name() + ' - ' + str(p.get_atb_charge())), textX, textY, screen)
+            self.display_single_line((p.name + ' - ' + str(p.atb)), textX, textY, screen)
             textY += 40
 
         textX = 300
@@ -84,7 +75,8 @@ class Battle(object):
         for e in self.enemyGroup.members:
             # Adjust enemy ATB gauge
             e.atb_charge(atbIncrement)
-            if e.ready:
+            if e.atb == 100:
+                e.ready = True
                 e.battle_script()
                 # Wait for 4 seconds (attack animation)
                 # time.sleep(4)
@@ -120,7 +112,7 @@ class Battle(object):
                             self.targeting = True
                             self.highlightedAction = 0
                             # player.reset_atb()
-                        elif self.highlightedAction == MAGIC:
+                        elif self.highlightedAction == SPECIAL:
                             self.magicMenu = True
                             self.highlightedAction = 0
                         elif self.highlightedAction == ITEM:

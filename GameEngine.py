@@ -68,7 +68,6 @@ class GameEngine(object):
         pygame.display.update()
 
     def battle_loop(self, battle):
-        #print(self.party.getMember(0).getName())
         bg = Surface((32,32))
         bg.convert()
         bg.fill(Color("#000000"))

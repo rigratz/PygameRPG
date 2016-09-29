@@ -24,7 +24,7 @@ def main():
                 game.platforms.append(e)
                 game.entities.add(e)
             if col == "X":
-                n = Enemy(x, y, 0)
+                n = EnemyOW(x, y, 0)
                 game.enemies.append(n)
                 game.entities.add(n)
             if col == "W":
@@ -34,7 +34,6 @@ def main():
         y += 32
         x = 0
         game.entities.add(game.player)
-    #----------------------------------------------------------------------
 
     game.start()
 

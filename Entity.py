@@ -15,7 +15,7 @@ class Entity(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
 
 
-class Enemy(Entity):
+class EnemyOW(Entity):
     def __init__(self, x, y, sprite):
         Entity.__init__(self)
         self.xvel = 0
