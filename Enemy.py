@@ -18,7 +18,8 @@ class Pengy(Enemy):
     def __init__(self):
         self.charged = False
         abilities = ['Peck', 'Snowball', 'Charge']
-        super(Pengy, self).__init__(name='Pengy', hp=10, str=5, spd=7, techs=abilities)
+        super(Pengy, self).__init__(name='Pengy', hp=10, str=5, spd=7, techs=abilities, resistance=['Ice'],
+                                    weakness=['Fire'])
 
     def battle_script(self):
         seed = random.randrange(0,100)

@@ -1,3 +1,4 @@
+from Action import Action
 import pygame
 from pygame import *
 import random
@@ -29,6 +30,7 @@ class Battle(object):
         self.magicMenu = False
         self.itemMenu = False
         self.targeting = False
+        self.selectedAction = None
         self.selectionBuffer = 0
 
         # Each character's starting ATB value is random
@@ -73,6 +75,10 @@ class Battle(object):
         textY = 10
 
         for e in self.enemyGroup.members:
+            if e.hp <= 0:
+                print(e.name + ' has returned from whence they came.')
+                self.enemyGroup.members.remove(e)
+
             # Adjust enemy ATB gauge
             e.atb_charge(atbIncrement)
             if e.atb == 100:
@@ -98,143 +104,109 @@ class Battle(object):
 
         # Display and navigate available Action options
         if self.battleQueue.get_size() > 0:
-            availableTechs = self.battleQueue.peek().techs
-            availableItems = self.party.items
-            if self.magicMenu is False and self.itemMenu is False and self.targeting is False:
-                # Display default Battle options
-                self.display_options(ACTIONS, self.highlightedAction, 300, 200, screen)
+            player = self.battleQueue.peek()
+            optionList = self.get_options_list(self.battleQueue.peek())
+            options = len(optionList) - 1
 
-                if self.selectionBuffer == 0:
-                    if controls.select:
-                        if self.highlightedAction == ATTACK:
-                            # player = self.battleQueue.dequeue()
-                            # print(player.name + ' attacks!')
-                            self.targeting = True
-                            self.highlightedAction = 0
-                            # player.reset_atb()
-                        elif self.highlightedAction == SPECIAL:
-                            self.magicMenu = True
-                            self.highlightedAction = 0
-                        elif self.highlightedAction == ITEM:
-                            self.itemMenu = True
-                            self.highlightedAction = 0
-                        elif self.highlightedAction == DEFEND:
-                            player = self.battleQueue.dequeue()
-                            print(player.name + ' defends!')
-                            self.highlightedAction = 0
-                            player.reset_atb()
-                        self.selectionBuffer = SELECTION_BUFFER
+            if self.targeting:
+                self.display_targets(optionList, self.highlightedAction, 300, 200, screen)
+            else:
+                self.display_options(optionList, self.highlightedAction, 300, 200, screen)
 
-                    if controls.skip:
-                        self.battleQueue.front_to_back()
-                        self.highlightedAction = 0
-                        self.selectionBuffer = SELECTION_BUFFER
-                    if controls.up:
-                        self.highlightedAction -= 1
-                        if self.highlightedAction < ATTACK:
-                            self.highlightedAction = DEFEND
-                        self.selectionBuffer = SELECTION_BUFFER
-                    if controls.down:
-                        self.highlightedAction += 1
-                        if self.highlightedAction > DEFEND:
-                            self.highlightedAction = ATTACK
-                        self.selectionBuffer = SELECTION_BUFFER
-            elif self.magicMenu is False and self.itemMenu is False and self.targeting is True:
-                self.display_targets(self.enemyGroup.members, self.highlightedAction,300, 200, screen)
-
-                if self.selectionBuffer == 0:
-                    if controls.select:
-                        target = self.enemyGroup.members[self.highlightedAction]
-                        player = self.battleQueue.dequeue()
-                        print(target.name + ' HP: ' + str(target.hp))
-                        print(player.name + ' attacks ' + target.name)
-                        self.calculate_damage(player, target, 'Attack')
-                        print(target.name + ' HP: ' + str(target.hp))
-                        if target.hp <= 0:
-                            print(target.name + ' defeated!')
-                            self.enemyGroup.members.remove(target)
-                        self.highlightedAction = 0
+            if self.selectionBuffer == 0:
+                if controls.select:
+                    if self.targeting is False:
+                        self.make_selection(player, optionList[self.highlightedAction])
+                    else:
+                        self.selectedAction.enact(player, optionList[self.highlightedAction])
+                        self.targeting = self.magicMenu = self.itemMenu = False
+                        self.battleQueue.dequeue()
+                    self.selectionBuffer = SELECTION_BUFFER
+                    self.highlightedAction = 0
+                if controls.cancel:
+                    if self.targeting:
                         self.targeting = False
-                        player.reset_atb()
-                        self.selectionBuffer = SELECTION_BUFFER
-
-                    if controls.cancel:
-                        self.targeting = False
-                        self.selectionBuffer = SELECTION_BUFFER
-
-                    if controls.skip:
-                        if self.battleQueue.size > 1:
-                            self.battleQueue.front_to_back()
-                            self.highlightedAction = 0
-                            self.selectionBuffer = SELECTION_BUFFER
-                    if controls.up:
-                        self.highlightedAction -= 1
-                        if self.highlightedAction < 0:
-                            self.highlightedAction = len(self.enemyGroup.members) - 1
-                        self.selectionBuffer = SELECTION_BUFFER
-                    if controls.down:
-                        self.highlightedAction += 1
-                        if self.highlightedAction > len(self.enemyGroup.members) - 1:
-                            self.highlightedAction = 0
-                        self.selectionBuffer = SELECTION_BUFFER
-            elif self.magicMenu and not self.targeting:
-                # Display Magic options
-                self.display_options(self.battleQueue.peek().techs, self.highlightedAction, 300, 200, screen)
-
-                if self.selectionBuffer == 0:
-                    if controls.select:
-                        # player = self.battleQueue.dequeue()
-                        # print(player.name + ' uses ' + availableTechs[self.highlightedAction] + " magic!")
-                        # self.magicMenu = False
-                        self.targeting = True
-                        self.highlightedAction = 0
-                        self.selectionBuffer = SELECTION_BUFFER
-                        # player.reset_atb()
-                    if controls.cancel:
+                    elif self.magicMenu:
                         self.magicMenu = False
-                        self.selectionBuffer = SELECTION_BUFFER
-                    if controls.up:
-                        self.highlightedAction -= 1
-                        if self.highlightedAction < 0:
-                            self.highlightedAction = len(availableTechs) - 1
-                        self.selectionBuffer = SELECTION_BUFFER
-                    if controls.down:
-                        self.highlightedAction += 1
-                        if self.highlightedAction > len(availableTechs) - 1:
-                            self.highlightedAction = 0
-                        self.selectionBuffer = SELECTION_BUFFER
-            elif self.itemMenu and not self.targeting:
-                # Display available Item options
-                self.display_options(self.party.items, self.highlightedAction, 300, 200, screen)
+                    elif self.itemMenu:
+                        self.itemMenu = False
+                    self.highlightedAction = 0
+                    self.selectionBuffer = SELECTION_BUFFER
+                if controls.skip:
+                    self.battleQueue.front_to_back()
+                    self.targeting = self.magicMenu = self.itemMenu = False
+                    self.highlightedAction = 0
+                    self.selectionBuffer = SELECTION_BUFFER
+                if controls.up or controls.left:
+                    self.highlightedAction -= 1
+                    if self.highlightedAction < 0:
+                        self.highlightedAction = options
+                    self.selectionBuffer = SELECTION_BUFFER
+                if controls.down or controls.right:
+                    self.highlightedAction += 1
+                    if self.highlightedAction > options:
+                        self.highlightedAction = 0
+                    self.selectionBuffer = SELECTION_BUFFER
 
-                if self.selectionBuffer == 0:
-                    if controls.select:
-                        player = self.battleQueue.dequeue()
-                        print(player.name + ' uses ' + availableItems[self.highlightedAction] + " item!")
-                        self.itemMenu = False
-                        self.selectionBuffer = SELECTION_BUFFER
-                        player.reset_atb()
-                    if controls.cancel:
-                        self.itemMenu = False
-                        self.selectionBuffer = SELECTION_BUFFER
-                    if controls.up:
-                        self.highlightedAction -= 1
-                        if self.highlightedAction < 0:
-                            self.highlightedAction = len(availableItems) - 1
-                        self.selectionBuffer = SELECTION_BUFFER
-                    if controls.down:
-                        self.highlightedAction += 1
-                        if self.highlightedAction > len(availableItems) - 1:
-                            self.highlightedAction = 0
-                        self.selectionBuffer = SELECTION_BUFFER
-            elif self.magicMenu and self.targeting:
-                self.display_targets(self.enemyGroup.members, self.highlightedAction, 300, 200, screen)
-                pass
-            elif self.itemMenu and self.targeting:
-                pass
         else:
             self.highlightedAction = -1
+
         return BATTLE_CONTINUE
+
+    def make_selection(self, actor, selection):
+        if self.magicMenu is False and self.itemMenu is False:
+            if selection == 'Attack':
+                self.selectedAction = actor.actions.attack
+                self.targeting = True
+            elif selection == 'Special':
+                self.magicMenu = True
+            elif selection == 'Item':
+                self.itemMenu = True
+            elif selection == 'Defend':
+                actor.actions.defend.enact(actor, None)
+                self.battleQueue.dequeue()
+        elif self.magicMenu:
+            for action in actor.actions.techs:
+                if selection == action.name:
+                    self.selectedAction = action
+                    self.targeting = True
+                    break
+
+        elif self.itemMenu:
+            for item in self.party.items:
+                if selection == item.name:
+                    self.selectedAction = item
+                    self.targeting = True
+                    break
+
+
+    def get_options_list(self, actor):
+        """Method to derive list of selectable options in battle. Seems sort of hacky as currently implemented,
+            will probably be done differently in later versions"""
+        if self.targeting:
+            if self.selectedAction.attack:
+                return self.enemyGroup.members
+            else:
+                return self.players
+
+        if self.magicMenu is False and self.itemMenu is False:
+            return ACTIONS
+
+        elif self.magicMenu:
+            return self.get_named_list(actor.techs)
+
+        elif self.itemMenu:
+            return self.get_named_list(self.party.items)
+
+        else:
+            return None
+
+    def get_named_list(self, list):
+        """MUST BE USED ON LIST OF OBJECTS CONTAINING .name FIELD"""
+        result = []
+        for i in list:
+            result.append(i.name)
+        return result
 
     @staticmethod
     def display_single_line(line, x, y, screen):
@@ -273,11 +245,6 @@ class Battle(object):
 
     def navigate_targets(self, caster, targets, action):
         pass
-
-    def calculate_damage(self, caster, target, action):
-        """Determines the result of a caster's action on a target"""
-        if action == 'Attack':
-            target.hp -= caster.str
 
     def battle_results(self):
         """Calculate XP gain, level increase, item drops, etc"""

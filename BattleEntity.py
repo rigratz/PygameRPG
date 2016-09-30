@@ -1,3 +1,4 @@
+from Action import *
 import random
 
 
@@ -21,6 +22,9 @@ class BattleEntity(object):
         self.mgd = 10
         self.spd = 10
         self.techs = []
+        self.resistance = []
+        self.weakness = []
+        self.defending = False
         self.friendly = False
 
         for prop, value in kwargs.items():
@@ -29,6 +33,7 @@ class BattleEntity(object):
             else:
                 pass # throw some type of exception
 
+        self.actions = Actions(self.techs)
         self.set_atb_start()
 
     def set_atb_start(self):
@@ -49,7 +54,7 @@ class BattleEntity(object):
 
     def take_action(self, action):
         """Does something. Not implemented yet"""
-        action.activate()
+        action.enact()
         self.reset_atb()
 
     def level_up(self):
